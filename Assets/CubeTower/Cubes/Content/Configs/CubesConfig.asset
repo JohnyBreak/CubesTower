@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a20c090353bcd43aded8a6e9c17586, type: 3}
+  m_Name: CubesConfig
+  m_EditorClassIdentifier: 
+  Dtos:
+  - _id: 0
+    _spriteName: Cubes_0
+  - _id: 1
+    _spriteName: Cubes_1
+  - _id: 2
+    _spriteName: Cubes_2
+  - _id: 3
+    _spriteName: Cubes_3
+  - _id: 4
+    _spriteName: Cubes_4
+  - _id: 5
+    _spriteName: Cubes_5
+  - _id: 6
+    _spriteName: Cubes_6
+  - _id: 7
+    _spriteName: Cubes_7
+  - _id: 9
+    _spriteName: Cubes_9
+  - _id: 10
+    _spriteName: Cubes_10
+  - _id: 11
+    _spriteName: Cubes_11
+  - _id: 12
+    _spriteName: Cubes_12
+  - _id: 13
+    _spriteName: Cubes_13
+  - _id: 14
+    _spriteName: Cubes_14
+  - _id: 15
+    _spriteName: Cubes_15
+  - _id: 16
+    _spriteName: Cubes_16
+  - _id: 17
+    _spriteName: Cubes_17
+  - _id: 18
+    _spriteName: Cubes_18
+  - _id: 19
+    _spriteName: Cubes_19
