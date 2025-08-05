@@ -11,6 +11,7 @@ public class ScrollView : MonoBehaviour
     [SerializeField] private CubeScrollView _itemPrefab;
     [SerializeField] private Transform _parent;
     [SerializeField] private ScrollRect _scrollRect;
+    [SerializeField] private CubeSpawner _cubeSpawner;
     
     private Action<int> _selectCallback;
     
@@ -42,6 +43,7 @@ public class ScrollView : MonoBehaviour
 
     private void OnSelect(int id)
     {
-        _selectCallback?.Invoke(id);
+        _cubeSpawner.Spawn(id);
+        //_selectCallback?.Invoke(id);
     }
 }
