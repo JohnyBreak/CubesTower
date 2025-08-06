@@ -12,6 +12,7 @@ namespace CubeTower
         private const string TopLimitMessageKey = "Top screen limit";
         private const string SpawnedKey = "Cube spawned";
         
+        [SerializeField] private CubeAnimator _animator;
         [SerializeField] private MessageBox _messageBox;
         [SerializeField] private Camera _cam;
         [SerializeField] private LayerMask _mask;
@@ -44,7 +45,6 @@ namespace CubeTower
                 }
 
                 cube.transform.position = newPos;
-                
                 AddToList(cube);
                 return true;
             }
@@ -74,11 +74,17 @@ namespace CubeTower
             var cubeOnTop = _listNodes.Tail.Data;
             
             var shift = Random.Range(-(cube.Size.x / 2), (cube.Size.x / 2));
-            cube.transform.position =
-                new Vector3(cubeOnTop.transform.position.x + shift, 
-                    cubeOnTop.transform.position.y + cube.Size.y,
-                    cube.transform.position.z);
-
+            // cube.transform.position =
+            //     new Vector3(cubeOnTop.transform.position.x + shift, 
+            //         cubeOnTop.transform.position.y + cube.Size.y,
+            //         cube.transform.position.z);
+            
+            Vector3 jumpPosition = new Vector3(cubeOnTop.transform.position.x + shift,
+                cubeOnTop.transform.position.y + cube.Size.y,
+                cube.transform.position.z);
+            
+            _animator.JumpTo(cube, jumpPosition);
+            
             AddToList(cube);
             return true;
         }
@@ -94,7 +100,7 @@ namespace CubeTower
         {
             var cube = _listNodes.Tail.Data;
 
-            var yPos = cube.transform.position.y + (cube.Size.y / 2);
+            var yPos = cube.transform.position.y + (cube.Size.y * 0.75f);
 
             return yPos < _rightUpCornerPos.y;
         }

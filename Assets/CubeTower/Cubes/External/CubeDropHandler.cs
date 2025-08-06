@@ -8,7 +8,8 @@ public class CubeDropHandler : MonoBehaviour
 {
     private const string DestroyKey = "Cube destroyed";
     private const string HoleKey = "Cube fell into the hole";
-        
+    
+    [SerializeField] private CubeAnimator _animator;
     [SerializeField] private MessageBox _messageBox;
     [SerializeField] private ScrollWorldPosition _scrollWorldPosition;
     [SerializeField] private Tower _tower;
@@ -25,21 +26,21 @@ public class CubeDropHandler : MonoBehaviour
         if (target.transform.position.y < scrollPos.y)
         {
             _messageBox.Show(DestroyKey.Localize());
-            Destroy(target.gameObject);
+            _animator.Destroy(target, () => Destroy(target.gameObject));
             return;
         }
             
         if (target.transform.position.x < 0)
         {
             _messageBox.Show(HoleKey.Localize());
-            Destroy(target.gameObject); // drop to hole
+            _animator.DropToHole(target, () => Destroy(target.gameObject));
             return;
         }
 
         if (_tower.TrySet(target) == false)
         {
             _messageBox.Show(DestroyKey.Localize());
-            Destroy(target.gameObject);
+            _animator.Destroy(target, () => Destroy(target.gameObject));
         }
     }
 }

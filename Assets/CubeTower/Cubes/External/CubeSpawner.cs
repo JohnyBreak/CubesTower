@@ -17,7 +17,7 @@ public class CubeSpawner : MonoBehaviour
         var cube = Instantiate(_prefab, spawnPos, Quaternion.identity);
         
         var sprite = IconsProvider.GetSprite(CubesConfig.SpriteSheetName, dto.SpriteName);
-        cube.GetComponent<SpriteRenderer>().sprite = sprite;
+        cube.SetSprite(sprite);
         
         _dragger.SetTarget(cube);
     }

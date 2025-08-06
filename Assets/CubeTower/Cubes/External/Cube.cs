@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
-using Vector3 = UnityEngine.Vector3;
 
 namespace Cubes
 {
     [RequireComponent(typeof(BoxCollider2D))]
     public class Cube : MonoBehaviour
     {
+        [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private BoxCollider2D _collider;
         
         private Action<Cube> _onDragStartCallback;
@@ -19,6 +19,8 @@ namespace Cubes
             _size = new Vector2(
                 _collider.size.x * transform.localScale.x, 
                 _collider.size.y * transform.localScale.y);
+
+            ToggleMaskable(false);
         }
 
         public void ToggleCollider(bool isActive)
@@ -34,6 +36,18 @@ namespace Cubes
         public void OnDragStart()
         {
             _onDragStartCallback?.Invoke(this);
+        }
+
+        public void SetSprite(Sprite sprite)
+        {
+            _spriteRenderer.sprite = sprite;
+        }
+
+        public void ToggleMaskable(bool showInMask)
+        {
+            _spriteRenderer.maskInteraction = showInMask
+                ? SpriteMaskInteraction.VisibleInsideMask
+                : SpriteMaskInteraction.None;
         }
     }
 }
