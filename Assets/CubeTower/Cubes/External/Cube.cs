@@ -8,8 +8,23 @@ namespace Cubes
     public class Cube : MonoBehaviour
     {
         [SerializeField] private BoxCollider2D _collider;
+        
         private Action<Cube> _onDragStartCallback;
-        public BoxCollider2D Collider => _collider;
+        private Vector2 _size;
+        
+        public Vector2 Size => _size;
+        
+        private void Awake()
+        {
+            _size = new Vector2(
+                _collider.size.x * transform.localScale.x, 
+                _collider.size.y * transform.localScale.y);
+        }
+
+        public void ToggleCollider(bool isActive)
+        {
+            _collider.enabled = isActive;
+        }
 
         public void SetDragCallback(Action<Cube> onDragStartCallback)
         {
