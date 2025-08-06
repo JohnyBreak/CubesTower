@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Cubes.UI
 {
-    public class CubeScrollView : MonoBehaviour, IDragHandler, IPointerClickHandler
+    public class CubeScrollView : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
     {
         [SerializeField] private Image _icon;
 
@@ -47,13 +47,14 @@ namespace Cubes.UI
             _isDragging = true;
             _selectCallback?.Invoke(_id);
         }
-
-        public void OnPointerClick(PointerEventData eventData)
+        
+        public void OnPointerDown(PointerEventData eventData)
         {
-            if (_isDragging)
-            {
-                _isDragging = false;
-            }
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            _isDragging = false;
         }
     }
 }
