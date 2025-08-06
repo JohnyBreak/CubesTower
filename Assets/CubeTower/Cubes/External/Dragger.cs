@@ -23,6 +23,7 @@ namespace Cubes
         {
             if (Input.GetMouseButtonUp(0))
             {
+                _currentCube.OnDragEnd();
                 _dropHandler.Drop(_currentCube);
                 _currentCube = null;
             }

@@ -57,8 +57,6 @@ public class CubeAnimator : MonoBehaviour
 
    private async UniTaskVoid DropCubesDownTask(List<Cube> cubes)
    {
-      List<UniTask> tasks = new();
-      
       foreach (var cube in cubes)
       {
          DropCube(cube);
@@ -70,6 +68,12 @@ public class CubeAnimator : MonoBehaviour
    {
       var newPos = cube.transform.position;
       newPos.y -= cube.Size.y;
-      cube.transform.DOMove(newPos, .3f).SetEase(Ease.InCubic);
+      cube.ToggleCollider(false);
+      
+      await cube.transform
+         .DOMove(newPos, .3f)
+         .SetEase(Ease.InCubic)
+         .OnComplete(() => cube.ToggleCollider(true))
+         .ToUniTask();
    }
 }

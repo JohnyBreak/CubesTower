@@ -85,11 +85,29 @@ namespace CubeTower
 
         public IEnumerable<T> GetDatasAfter(T data)
         {
-            var node = GetNode(data);
-            var current = node.Next;
+            if (Count < 1 || Head == null)
+            {
+                yield break;
+            }
+            
+            var current = Head;
+
+            bool targetFound = false;
+            
             while (current != null)
             {
-                yield return current.Data;
+                if (current.Data.Equals(data))
+                {
+                    targetFound = true;
+                    current = current.Next;
+                    continue;
+                }
+
+                if (targetFound)
+                {
+                    yield return current.Data;
+                }
+
                 current = current.Next;
             }
         }

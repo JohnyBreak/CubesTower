@@ -199,6 +199,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &376418100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 376418101}
+  m_Layer: 0
+  m_Name: CubesParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &376418101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376418100}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.2501225, y: 0.053376786, z: 0.6506895}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &402034668
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +265,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0.000061035156, y: -9.652}
-  m_SizeDelta: {x: -1820.0001, y: 197.348}
+  m_SizeDelta: {x: 0, y: 197.348}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &402034670
 MonoBehaviour:
@@ -1357,6 +1388,7 @@ MonoBehaviour:
   _config: {fileID: 11400000, guid: b8c55513d4af68a4b8b42863cd6429a8, type: 2}
   _prefab: {fileID: 1281713573413678399, guid: b7dd6e6927d69dc408aea03b924cf170, type: 3}
   _dragger: {fileID: 632072368}
+  _parent: {fileID: 376418101}
 --- !u!4 &1409102225
 Transform:
   m_ObjectHideFlags: 0
@@ -1957,3 +1989,4 @@ SceneRoots:
   - {fileID: 1409102225}
   - {fileID: 632072369}
   - {fileID: 205340354}
+  - {fileID: 376418101}
