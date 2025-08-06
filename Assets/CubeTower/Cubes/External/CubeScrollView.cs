@@ -7,6 +7,7 @@ namespace Cubes.UI
 {
     public class CubeScrollView : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
     {
+        private const float DragAngle = 70;
         [SerializeField] private Image _icon;
 
         private Action<int> _selectCallback;
@@ -38,7 +39,9 @@ namespace Cubes.UI
                 return;
             }
 
-            if (Mathf.Abs(eventData.delta.x) > Mathf.Abs(eventData.delta.y))
+            
+            var angle = Vector2.SignedAngle(Vector2.up, eventData.delta);
+            if(angle < -DragAngle || angle > DragAngle)
             {
                 _dragScrollCallback?.Invoke(eventData);
                 return;
