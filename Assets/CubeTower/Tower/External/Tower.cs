@@ -1,6 +1,7 @@
-using System;
 using System.Collections;
 using Cubes;
+using Localization;
+using Message;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,6 +9,10 @@ namespace CubeTower
 {
     public class Tower : MonoBehaviour
     {
+        private const string TopLimitMessageKey = "Top screen limit";
+        private const string SpawnedKey = "Cube spawned";
+        
+        [SerializeField] private MessageBox _messageBox;
         [SerializeField] private Camera _cam;
         [SerializeField] private LayerMask _mask;
         
@@ -60,6 +65,7 @@ namespace CubeTower
 
             if (CanBeSetOnTop() == false)
             {
+                _messageBox.Show(TopLimitMessageKey.Localize(), 1);
                 return false;
             }
             
@@ -81,6 +87,7 @@ namespace CubeTower
         {
             cube.SetDragCallback(OnCubeDrag);
             _listNodes.Add(cube);
+            _messageBox.Show(SpawnedKey.Localize());
         }
 
         private bool CanBeSetOnTop()

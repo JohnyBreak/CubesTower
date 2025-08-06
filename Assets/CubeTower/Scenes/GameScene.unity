@@ -661,6 +661,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830d10fa4659e1247b0c64f33703b1fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _messageBox: {fileID: 1470733426}
   _cam: {fileID: 519420031}
   _mask:
     serializedVersion: 2
@@ -1267,6 +1268,7 @@ GameObject:
   - component: {fileID: 1470733428}
   - component: {fileID: 1470733427}
   - component: {fileID: 1470733426}
+  - component: {fileID: 1470733429}
   m_Layer: 5
   m_Name: MessageBox
   m_TagString: Untagged
@@ -1306,8 +1308,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f44a3537f1d200746912a6cf9d0a451b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvasGroup: {fileID: 0}
-  _text: {fileID: 0}
+  _canvasGroup: {fileID: 1470733429}
+  _text: {fileID: 559210225}
 --- !u!114 &1470733427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1346,6 +1348,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1470733424}
   m_CullTransparentMesh: 1
+--- !u!225 &1470733429
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470733424}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1681447913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1603,6 +1617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1bd8ce4572bc9043a81c7e5475c1b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _messageBox: {fileID: 1470733426}
   _scrollWorldPosition: {fileID: 1452908210}
   _tower: {fileID: 887205451}
 --- !u!4 &1946357154

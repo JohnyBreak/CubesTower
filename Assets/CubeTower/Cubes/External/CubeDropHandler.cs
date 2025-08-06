@@ -1,9 +1,15 @@
 using Cubes;
 using CubeTower;
+using Localization;
+using Message;
 using UnityEngine;
 
 public class CubeDropHandler : MonoBehaviour
 {
+    private const string DestroyKey = "Cube destroyed";
+    private const string HoleKey = "Cube fell into the hole";
+        
+    [SerializeField] private MessageBox _messageBox;
     [SerializeField] private ScrollWorldPosition _scrollWorldPosition;
     [SerializeField] private Tower _tower;
     
@@ -18,18 +24,21 @@ public class CubeDropHandler : MonoBehaviour
             
         if (target.transform.position.y < scrollPos.y)
         {
+            _messageBox.Show(DestroyKey.Localize());
             Destroy(target.gameObject);
             return;
         }
             
         if (target.transform.position.x < 0)
         {
+            _messageBox.Show(HoleKey.Localize());
             Destroy(target.gameObject); // drop to hole
             return;
         }
 
         if (_tower.TrySet(target) == false)
         {
+            _messageBox.Show(DestroyKey.Localize());
             Destroy(target.gameObject);
         }
     }
