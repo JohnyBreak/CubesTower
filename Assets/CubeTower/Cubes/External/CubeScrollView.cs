@@ -38,7 +38,11 @@ namespace Cubes.UI
             {
                 return;
             }
-
+            
+            if (eventData.button != PointerEventData.InputButton.Left)
+            {
+                return;
+            }
             
             var angle = Vector2.SignedAngle(Vector2.up, eventData.delta);
             if(angle < -DragAngle || angle > DragAngle)
