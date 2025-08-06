@@ -1,12 +1,13 @@
 using Cubes;
+using CubeTower;
 using UnityEngine;
 
 public class CubeDropHandler : MonoBehaviour
 {
     [SerializeField] private ScrollWorldPosition _scrollWorldPosition;
-    [SerializeField] private LayerMask _mask;
+    [SerializeField] private Tower _tower;
     
-    public void Drop(Draggable target)
+    public void Drop(Cube target)
     {
         if (!target)
         {
@@ -23,25 +24,13 @@ public class CubeDropHandler : MonoBehaviour
             
         if (target.transform.position.x < 0)
         {
-            Destroy(target.gameObject); 
+            Destroy(target.gameObject); // drop to hole
             return;
         }
 
-        target.Collider.enabled = false;
-        var coll = Physics2D.OverlapBox(
-            target.transform.position, 
-            target.Collider.bounds.size,
-            0,
-            _mask);
-            
-        target.Collider.enabled = true;
-            
-        if (!coll)
+        if (_tower.TrySet(target) == false)
         {
-            return;
+            Destroy(target.gameObject);
         }
-
-        target.transform.position = coll.transform.position 
-                                   + Vector3.up * (target.transform.localScale.y * target.Collider.size.y);
     }
 }

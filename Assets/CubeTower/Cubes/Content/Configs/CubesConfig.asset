@@ -29,6 +29,8 @@ MonoBehaviour:
     _spriteName: Cubes_6
   - _id: 7
     _spriteName: Cubes_7
+  - _id: 8
+    _spriteName: Cubes_8
   - _id: 9
     _spriteName: Cubes_9
   - _id: 10
@@ -49,5 +51,3 @@ MonoBehaviour:
     _spriteName: Cubes_17
   - _id: 18
     _spriteName: Cubes_18
-  - _id: 19
-    _spriteName: Cubes_19

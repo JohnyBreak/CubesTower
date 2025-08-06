@@ -8,35 +8,36 @@ namespace Cubes
         [SerializeField] private LayerMask _mask;
         [SerializeField] private CubeDropHandler _dropHandler;
         
-        private Draggable _currentDraggable;
+        private Cube _currentCube;
         private Vector3 _dragOffset;
         private const float Speed = 1000;
 
-        public void SetTarget(Draggable target)
+        public void SetTarget(Cube target)
         {
-            _currentDraggable = target;
-            _dragOffset = _currentDraggable.transform.position - GetMousePos();
+            _currentCube = target;
+            _dragOffset = _currentCube.transform.position - GetMousePos();
+            _currentCube.OnDragStart();
         }
 
         private void Update()
         {
             if (Input.GetMouseButtonUp(0))
             {
-                _dropHandler.Drop(_currentDraggable);
-                _currentDraggable = null;
+                _dropHandler.Drop(_currentCube);
+                _currentCube = null;
             }
 
-            if (Input.GetMouseButton(0) && _currentDraggable)
+            if (Input.GetMouseButton(0) && _currentCube)
             {
-                _currentDraggable.transform.position =
+                _currentCube.transform.position =
                     Vector3.MoveTowards(
-                        _currentDraggable.transform.position, 
+                        _currentCube.transform.position, 
                         GetMousePos() + _dragOffset, 
                         Speed * Time.deltaTime);
                 return;
             }
 
-            if (_currentDraggable)
+            if (_currentCube)
             {
                 return;
             }
@@ -53,7 +54,7 @@ namespace Cubes
                     return;
                 }
 
-                if (rayHit.transform.TryGetComponent<Draggable>(out var draggable))
+                if (rayHit.transform.TryGetComponent<Cube>(out var draggable))
                 {
                     SetTarget(draggable);
                 }

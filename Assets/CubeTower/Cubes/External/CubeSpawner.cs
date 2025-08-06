@@ -6,7 +6,7 @@ public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private Camera _cam;
     [SerializeField] private CubesConfig _config;
-    [SerializeField] private Draggable _prefab;
+    [SerializeField] private Cube _prefab;
     [SerializeField] private Dragger _dragger;
 
     public void Spawn(int id)
