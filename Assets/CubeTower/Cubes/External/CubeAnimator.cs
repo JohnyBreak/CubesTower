@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Cubes;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -46,5 +48,28 @@ public class CubeAnimator : MonoBehaviour
       {
          target.ToggleCollider(true);
       });
+   }
+
+   public void DropCubesDown(List<Cube> cubes)
+   {
+      DropCubesDownTask(cubes).Forget();
+   }
+
+   private async UniTaskVoid DropCubesDownTask(List<Cube> cubes)
+   {
+      List<UniTask> tasks = new();
+      
+      foreach (var cube in cubes)
+      {
+         DropCube(cube);
+         await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
+      }
+   }
+
+   private async UniTask DropCube(Cube cube)
+   {
+      var newPos = cube.transform.position;
+      newPos.y -= cube.Size.y;
+      cube.transform.DOMove(newPos, .3f).SetEase(Ease.InCubic);
    }
 }

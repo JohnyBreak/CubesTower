@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Cubes;
 using Localization;
 using Message;
@@ -107,7 +108,15 @@ namespace CubeTower
 
         private void OnCubeDrag(Cube cube)
         {
+            DropTopCubes(cube);
             _listNodes.Remove(cube);
+        }
+
+        private void DropTopCubes(Cube cube)
+        {
+            var cubesToDrop = _listNodes.GetDatasAfter(cube).ToList();
+
+            _animator.DropCubesDown(cubesToDrop);
         }
     }
 }

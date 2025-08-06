@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+
 namespace CubeTower
 {
     public class TowerList<T>
@@ -76,6 +79,17 @@ namespace CubeTower
                     return;
                 }
 
+                current = current.Next;
+            }
+        }
+
+        public IEnumerable<T> GetDatasAfter(T data)
+        {
+            var node = GetNode(data);
+            var current = node.Next;
+            while (current != null)
+            {
+                yield return current.Data;
                 current = current.Next;
             }
         }
