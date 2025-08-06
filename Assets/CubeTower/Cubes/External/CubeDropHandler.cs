@@ -8,6 +8,11 @@ public class CubeDropHandler : MonoBehaviour
     
     public void Drop(Draggable target)
     {
+        if (!target)
+        {
+            return;
+        }
+
         var scrollPos = _scrollWorldPosition.GetPosition();
             
         if (target.transform.position.y < scrollPos.y)
@@ -22,16 +27,14 @@ public class CubeDropHandler : MonoBehaviour
             return;
         }
 
-        var collider = target.GetComponent<BoxCollider2D>();
-        
-        collider.enabled = false;
+        target.Collider.enabled = false;
         var coll = Physics2D.OverlapBox(
             target.transform.position, 
-            collider.bounds.size,
+            target.Collider.bounds.size,
             0,
             _mask);
             
-        collider.enabled = true;
+        target.Collider.enabled = true;
             
         if (!coll)
         {
@@ -39,6 +42,6 @@ public class CubeDropHandler : MonoBehaviour
         }
 
         target.transform.position = coll.transform.position 
-                                   + Vector3.up * target.transform.localScale.y * collider.size.y;
+                                   + Vector3.up * (target.transform.localScale.y * target.Collider.size.y);
     }
 }
