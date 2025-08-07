@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cubes;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -10,6 +11,13 @@ public class CubeAnimator : MonoBehaviour
    [SerializeField] private Transform _firstHoleT;
    [SerializeField] private Transform _secondHoleT;
    
+   private CancellationToken _cancellationToken;
+   
+   private void Awake()
+   {
+      _cancellationToken = this.GetCancellationTokenOnDestroy();
+   }
+
    public void DropToHole(Cube target, Action onCompleteCallback)
    {
       var sequence = DOTween.Sequence();
@@ -60,10 +68,16 @@ public class CubeAnimator : MonoBehaviour
       foreach (var cube in cubes)
       {
          DropCube(cube);
-         await UniTask.Delay(TimeSpan.FromSeconds(0.05f));
+         await UniTask.Delay(
+            TimeSpan.FromSeconds(0.05f),
+            false, 
+            PlayerLoopTiming.Update, 
+            _cancellationToken);
       }
    }
 
+   
+   
    private async UniTask DropCube(Cube cube)
    {
       var newPos = cube.transform.position;
@@ -74,6 +88,6 @@ public class CubeAnimator : MonoBehaviour
          .DOMove(newPos, .3f)
          .SetEase(Ease.InCubic)
          .OnComplete(() => cube.ToggleCollider(true))
-         .ToUniTask();
+         .WithCancellation(_cancellationToken);
    }
 }
