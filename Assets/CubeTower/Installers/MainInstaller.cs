@@ -23,6 +23,7 @@ public class MainInstaller : MonoInstaller
         Container.Bind<Tower>().FromNew().AsSingle();
         Container.Bind<AssetProvider>().FromNew().AsSingle();
         Container.Bind<IconsProvider>().FromNew().AsSingle();
+        Container.Bind<ITowerPredicate>().To<TestTowerPredicate>().FromNew().AsSingle();
         
         Container.Bind<CubePool>().FromNew().AsSingle();
         Container.Bind<LayerMaskProvider>().FromInstance(_layerMaskProvider).AsSingle();
