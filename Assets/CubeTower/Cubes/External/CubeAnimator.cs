@@ -90,4 +90,15 @@ public class CubeAnimator : MonoBehaviour
          .OnComplete(() => cube.ToggleCollider(true))
          .WithCancellation(_cancellationToken);
    }
+
+   public void MoveTo(Cube target, Vector3 position)
+   {
+      var sequence = DOTween.Sequence();
+      sequence.AppendCallback(() => target.ToggleCollider(false));
+      sequence.Append(target.transform.DOMove(position, 0.2f).SetEase(Ease.InCubic));
+      sequence.OnComplete(() =>
+      {
+         target.ToggleCollider(true);
+      });
+   }
 }

@@ -33,7 +33,7 @@ namespace CubeTower
             {
                 var newPos = cube.transform.position;
                 
-                var xPos = cube.transform.position.x + (cube.Size.x / 2);
+                var xPos = cube.transform.position.x + (cube.Size.x);
                 if (xPos > _rightUpCornerPos.x)
                 {
                     newPos.x = _rightUpCornerPos.x - (cube.Size.x);
@@ -45,7 +45,7 @@ namespace CubeTower
                     newPos.y = _rightUpCornerPos.y - (cube.Size.y / 2);
                 }
 
-                cube.transform.position = newPos;
+                _animator.MoveTo(cube, newPos);
                 AddToList(cube);
                 return true;
             }
