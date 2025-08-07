@@ -1,6 +1,7 @@
 using System;
 using Cubes;
 using Cubes.Config;
+using Cubes.UI;
 using Pool;
 using UnityEngine;
 
@@ -48,13 +49,13 @@ public class CubeFactory
     private readonly IconsProvider _iconsProvider;
     private readonly CubePool _pool;
     
-    private readonly CubeDto[] _dtos;
+    private readonly ConfigContainer _dtos;
 
     public CubeFactory(
         IconsProvider iconsProvider, 
         AssetProvider assetProvider,
         CubePool pool,
-        CubeDto[] dtos)
+        ConfigContainer dtos)
     {
         _iconsProvider = iconsProvider;
         _pool = pool;
@@ -65,10 +66,10 @@ public class CubeFactory
 
     public Cube GetCube(int id)
     {
-        var dto = _dtos[id];
+        var dto = _dtos.CubesDtos.Dtos[id];
         var cube = _pool.GetPooledObject(true);
         
-        var sprite = _iconsProvider.GetSprite(CubesConfig.SpriteSheetName, dto.SpriteName);
+        var sprite = _iconsProvider.GetSprite(_dtos.CubesDtos.SpriteSheetName, dto.SpriteName);
         cube.SetSprite(sprite);
         return cube;
     }

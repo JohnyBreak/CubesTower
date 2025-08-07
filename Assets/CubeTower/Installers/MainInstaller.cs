@@ -1,22 +1,21 @@
 using System;
 using Cubes;
-using Cubes.Config;
+using Cubes.UI;
 using CubeTower;
 using Message;
 using Pool;
+using Serialization;
 using UnityEngine;
 using Zenject;
 
 public class MainInstaller : MonoInstaller
 {
-    [SerializeField] private CubesConfig _config;
     [SerializeField] private RectTransform _scrollViewBorder;
     [SerializeField] private Camera _cam;
     [SerializeField] private MessageBox _messageBox;
     [SerializeField] private ScrollView _scrollView;
     [SerializeField] private LayerMaskProvider _layerMaskProvider;
     [SerializeField] private Dragger _dragger;
-    //[SerializeField] private cube pool
     [SerializeField] private Hole _hole;
     
     public override void InstallBindings()
@@ -26,7 +25,9 @@ public class MainInstaller : MonoInstaller
         Container.Bind<IDisposable>().To<AssetProvider>().FromResolve();
         Container.Bind<IconsProvider>().FromNew().AsSingle();
         Container.Bind<ITowerPredicate>().To<TestTowerPredicate>().FromNew().AsSingle();
-       
+        Container.Bind<ConfigContainer>().FromNew().AsSingle();
+        
+        Container.Bind<IConfigReader>().To<JsonNewtonsoftConfigReader>().FromNew().AsSingle();
         Container.Bind<CubePool>().FromNew().AsSingle();
         Container.Bind<LayerMaskProvider>().FromInstance(_layerMaskProvider).AsSingle();
         Container.Bind<Hole>().FromInstance(_hole).AsSingle();
@@ -57,7 +58,9 @@ public class MainInstaller : MonoInstaller
         var iconsProvider = context.Container.Resolve<IconsProvider>();
         var assetProvider = context.Container.Resolve<AssetProvider>();
         var pool = context.Container.Resolve<CubePool>();
-        return new CubeFactory(iconsProvider, assetProvider, pool, _config.Dtos);
+        var container = context.Container.Resolve<ConfigContainer>();
+        
+        return new CubeFactory(iconsProvider, assetProvider, pool, container);
     }
 
     private CubeSpawner CreateCubeSpawner(InjectContext context)
