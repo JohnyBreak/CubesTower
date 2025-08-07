@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Linq;
 using Cubes;
 using Localization;
@@ -8,41 +7,49 @@ using Random = UnityEngine.Random;
 
 namespace CubeTower
 {
-    public class Tower : MonoBehaviour
+    public class Tower
     {
         private const string TopLimitMessageKey = "Top screen limit";
         private const string SpawnedKey = "Cube spawned";
         
-        [SerializeField] private CubeAnimator _animator;
-        [SerializeField] private MessageBox _messageBox;
-        [SerializeField] private Camera _cam;
-        [SerializeField] private LayerMask _mask;
-        
         private TowerList<Cube> _listNodes = new();
-        private Vector3 _rightUpCornerPos;
         
-        private IEnumerator Start()
+        private readonly ScreenWorldUtility _screenWorldUtility;
+        private readonly CubeAnimator _animator;
+        private readonly MessageBox _messageBox;
+        private readonly LayerMaskProvider _layerMaskProvider;
+
+        public Tower(
+            ScreenWorldUtility screenWorldUtility, 
+            CubeAnimator animator, 
+            MessageBox messageBox,
+            LayerMaskProvider layerMaskProvider)
         {
-            yield return null;
-            _rightUpCornerPos = _cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+            _screenWorldUtility = screenWorldUtility;
+            _animator = animator;
+            _messageBox = messageBox;
+            _layerMaskProvider = layerMaskProvider;
         }
+
 
         public bool TrySet(Cube cube)
         {
+            var rightUpCornerPos = _screenWorldUtility.GetRightUpCornerPosition();
+            
             if (_listNodes.Count < 1)
             {
                 var newPos = cube.transform.position;
                 
                 var xPos = cube.transform.position.x + (cube.Size.x);
-                if (xPos > _rightUpCornerPos.x)
+                if (xPos > rightUpCornerPos.x)
                 {
-                    newPos.x = _rightUpCornerPos.x - (cube.Size.x);
+                    newPos.x = rightUpCornerPos.x - (cube.Size.x);
                 }
                 
                 var yPos = cube.transform.position.y + (cube.Size.y / 2);
-                if (yPos > _rightUpCornerPos.y)
+                if (yPos > rightUpCornerPos.y)
                 {
-                    newPos.y = _rightUpCornerPos.y - (cube.Size.y / 2);
+                    newPos.y = rightUpCornerPos.y - (cube.Size.y / 2);
                 }
 
                 _animator.MoveTo(cube, newPos);
@@ -55,7 +62,7 @@ namespace CubeTower
                 cube.transform.position, 
                 cube.Size * 0.5f,
                 0,
-                _mask);
+                _layerMaskProvider.CubeMask);
             
             cube.ToggleCollider(true);
             
@@ -99,7 +106,7 @@ namespace CubeTower
 
             var yPos = cube.transform.position.y + (cube.Size.y * 0.75f);
 
-            return yPos < _rightUpCornerPos.y;
+            return yPos <  _screenWorldUtility.GetRightUpCornerPosition().y;
         }
 
         private void OnCubeDrag(Cube cube)

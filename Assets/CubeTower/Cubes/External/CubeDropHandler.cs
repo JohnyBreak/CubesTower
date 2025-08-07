@@ -4,16 +4,28 @@ using Localization;
 using Message;
 using UnityEngine;
 
-public class CubeDropHandler : MonoBehaviour
+public class CubeDropHandler
 {
     private const string DestroyKey = "Cube destroyed";
     private const string HoleKey = "Cube fell into the hole";
     
-    [SerializeField] private CubeAnimator _animator;
-    [SerializeField] private MessageBox _messageBox;
-    [SerializeField] private ScrollWorldPosition _scrollWorldPosition;
-    [SerializeField] private Tower _tower;
-    
+    private readonly CubeAnimator _animator;
+    private readonly MessageBox _messageBox;
+    private readonly ScreenWorldUtility _screenWorldUtility;
+    private readonly Tower _tower;
+
+    public CubeDropHandler(
+        Tower tower, 
+        ScreenWorldUtility screenWorldUtility,
+        CubeAnimator animator,
+        MessageBox messageBox)
+    {
+        _tower = tower;
+        _screenWorldUtility = screenWorldUtility;
+        _animator = animator;
+        _messageBox = messageBox;
+    }
+
     public void Drop(Cube target)
     {
         if (!target)
@@ -21,26 +33,26 @@ public class CubeDropHandler : MonoBehaviour
             return;
         }
 
-        var scrollPos = _scrollWorldPosition.GetPosition();
+        var scrollPos = _screenWorldUtility.GetScrollPosition();
             
         if (target.transform.position.y < scrollPos.y)
         {
             _messageBox.Show(DestroyKey.Localize());
-            _animator.Destroy(target, () => Destroy(target.gameObject));
+            _animator.Destroy(target, () => Object.Destroy(target.gameObject));//TODO: return to pool
             return;
         }
             
         if (target.transform.position.x < 0)
         {
             _messageBox.Show(HoleKey.Localize());
-            _animator.DropToHole(target, () => Destroy(target.gameObject));
+            _animator.DropToHole(target, () => Object.Destroy(target.gameObject));
             return;
         }
 
         if (_tower.TrySet(target) == false)
         {
             _messageBox.Show(DestroyKey.Localize());
-            _animator.Destroy(target, () => Destroy(target.gameObject));
+            _animator.Destroy(target, () => Object.Destroy(target.gameObject));
         }
     }
 }

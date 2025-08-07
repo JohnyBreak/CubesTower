@@ -1,21 +1,33 @@
 using UnityEngine;
+using Zenject;
 
 namespace Cubes
 {
     public class Dragger : MonoBehaviour
     {
-        [SerializeField] private Camera _cam;
-        [SerializeField] private LayerMask _mask;
-        [SerializeField] private CubeDropHandler _dropHandler;
+        private CubeDropHandler _dropHandler;
+        private ScreenWorldUtility _utility;
+        private LayerMaskProvider _layerMaskProvider;
         
         private Cube _currentCube;
         private Vector3 _dragOffset;
         private const float Speed = 1000;
 
+        [Inject]
+        private void Init(
+            CubeDropHandler dropHandler, 
+            ScreenWorldUtility utility,
+            LayerMaskProvider layerMaskProvider)
+        {
+            _dropHandler = dropHandler;
+            _utility = utility;
+            _layerMaskProvider = layerMaskProvider;
+        }
+
         public void SetTarget(Cube target)
         {
             _currentCube = target;
-            _dragOffset = _currentCube.transform.position - GetMousePos();
+            _dragOffset = _currentCube.transform.position - _utility.GetMouseWorldPosition();
             _currentCube.OnDragStart();
         }
 
@@ -36,7 +48,7 @@ namespace Cubes
                 _currentCube.transform.position =
                     Vector3.MoveTowards(
                         _currentCube.transform.position, 
-                        GetMousePos() + _dragOffset, 
+                        _utility.GetMouseWorldPosition() + _dragOffset, 
                         Speed * Time.deltaTime);
                 return;
             }
@@ -49,9 +61,9 @@ namespace Cubes
             if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit2D rayHit = Physics2D.GetRayIntersection(
-                    _cam.ScreenPointToRay(Input.mousePosition), 
+                    _utility.GetScreenPointToRay(), 
                     10000, 
-                    _mask);
+                    _layerMaskProvider.CubeMask);
             
                 if (!rayHit.collider)
                 {
@@ -63,13 +75,6 @@ namespace Cubes
                     SetTarget(draggable);
                 }
             }
-        }
-
-        private Vector3 GetMousePos()
-        {
-            var position = _cam.ScreenToWorldPoint(Input.mousePosition);
-            position.z = 0;
-            return position;
         }
     }
 }

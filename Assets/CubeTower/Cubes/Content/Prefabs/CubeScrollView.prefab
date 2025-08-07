@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4648257752476814387}
   - component: {fileID: 6260443920075083450}
   - component: {fileID: 1354598632213807782}
-  - component: {fileID: 776416031271093637}
+  - component: {fileID: 7399044087618133289}
   m_Layer: 5
   m_Name: CubeScrollView
   m_TagString: Untagged
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _icon: {fileID: 6260443920075083450}
---- !u!61 &776416031271093637
+--- !u!61 &7399044087618133289
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,5 +133,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 135, y: 135}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0

@@ -1,36 +1,39 @@
 using System;
+using Cubes;
 using Cubes.Config;
 using Cubes.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Zenject;
 
 public class ScrollView : MonoBehaviour
 {
-    [SerializeField] private CubesConfig _config;
-    [SerializeField] private CubeScrollView _itemPrefab;
+    public event Action<int> OnCubeSelectEvent;
+    private const string CubeScrollViewPrefabKey = "CubeScrollView";
+    private const string CubesConfigKey = "CubesConfig";
+    
     [SerializeField] private Transform _parent;
     [SerializeField] private ScrollRect _scrollRect;
-    [SerializeField] private CubeSpawner _cubeSpawner;
     
+    private CubeScrollView _prefab;
     private Action<int> _selectCallback;
     
-    private void Start()
+    [Inject]
+    private void Init(AssetProvider assetProvider, IconsProvider iconsProvider)
     {
-        foreach (var dto in _config.Dtos)
+        _prefab = assetProvider.LoadAssetSync<GameObject>(CubeScrollViewPrefabKey).GetComponent<CubeScrollView>();
+        var config = assetProvider.LoadAssetSync<CubesConfig>(CubesConfigKey);
+        
+        foreach (var dto in config.Dtos)
         {
-            var cube = Instantiate(_itemPrefab, _parent);
+            var cube = Instantiate(_prefab, _parent);
             cube.Init(
                 dto.ID,
-                IconsProvider.GetSprite(CubesConfig.SpriteSheetName, dto.SpriteName),
+                iconsProvider.GetSprite(CubesConfig.SpriteSheetName, dto.SpriteName),
                 OnSelect,
                 DragScroll);
         }
-    }
-
-    public void Init(Action<int> selectCallback)
-    {
-        _selectCallback = selectCallback;
     }
 
     private void DragScroll(PointerEventData eventData)
@@ -43,7 +46,6 @@ public class ScrollView : MonoBehaviour
 
     private void OnSelect(int id)
     {
-        _cubeSpawner.Spawn(id);
-        //_selectCallback?.Invoke(id);
+        OnCubeSelectEvent?.Invoke(id);
     }
 }

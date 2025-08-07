@@ -6,16 +6,16 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
-public class CubeAnimator : MonoBehaviour
+public class CubeAnimator
 {
-   [SerializeField] private Transform _firstHoleT;
-   [SerializeField] private Transform _secondHoleT;
+   private readonly Hole _hole;
    
    private CancellationToken _cancellationToken;
    
-   private void Awake()
+   public CubeAnimator(Hole hole)
    {
-      _cancellationToken = this.GetCancellationTokenOnDestroy();
+      _hole = hole;
+      _cancellationToken = _hole.GetCancellationTokenOnDestroy();
    }
 
    public void DropToHole(Cube target, Action onCompleteCallback)
@@ -23,10 +23,10 @@ public class CubeAnimator : MonoBehaviour
       var sequence = DOTween.Sequence();
       
       sequence.AppendCallback(() => target.ToggleCollider(false));
-      sequence.Append(target.transform.DOMove(_firstHoleT.position, 0.5f).SetEase(Ease.OutSine));
+      sequence.Append(target.transform.DOMove(_hole.FirstT.position, 0.5f).SetEase(Ease.OutSine));
       sequence.Append(target.transform.DORotate(new Vector3(0,0,45), 0.3f).SetEase(Ease.OutSine));
       sequence.AppendCallback(() => target.ToggleMaskable(true));
-      sequence.Append(target.transform.DOMove(_secondHoleT.position, 0.5f).SetEase(Ease.OutSine));
+      sequence.Append(target.transform.DOMove(_hole.SecondT.position, 0.5f).SetEase(Ease.OutSine));
       sequence.OnComplete(() =>
       {
          target.ToggleCollider(true);

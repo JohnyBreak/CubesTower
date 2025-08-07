@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
-    public static class IconsProvider
+    public class IconsProvider
     {
-        private static Dictionary<string, Sprite> _spritesMap = new();
+        private readonly AssetProvider _assetProvider;
+        private Dictionary<string, Sprite> _spritesMap = new();
 
-        public static Sprite GetSprite(string spriteSheetName, string spriteName)
+        public IconsProvider(AssetProvider assetProvider)
+        {
+            _assetProvider = assetProvider;
+        }
+
+        public Sprite GetSprite(string spriteSheetName, string spriteName)
         {
             if (string.IsNullOrEmpty(spriteSheetName) || string.IsNullOrEmpty(spriteName))
             {
@@ -21,7 +26,7 @@ using UnityEngine.AddressableAssets;
                 return sprite;
             }
 
-            var loadedSprite = Addressables.LoadAssetAsync<Sprite>(fullName).WaitForCompletion();
+            var loadedSprite = _assetProvider.LoadAssetSync<Sprite>(fullName);
 
             _spritesMap[fullName] = loadedSprite;
 
