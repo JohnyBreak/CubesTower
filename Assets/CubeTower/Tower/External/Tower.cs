@@ -53,7 +53,7 @@ namespace CubeTower
             cube.ToggleCollider(false);
             var coll = Physics2D.OverlapBox(
                 cube.transform.position, 
-                cube.Size,
+                cube.Size * 0.5f,
                 0,
                 _mask);
             
@@ -75,11 +75,7 @@ namespace CubeTower
             var cubeOnTop = _listNodes.Tail.Data;
             
             var shift = Random.Range(-(cube.Size.x / 2), (cube.Size.x / 2));
-            // cube.transform.position =
-            //     new Vector3(cubeOnTop.transform.position.x + shift, 
-            //         cubeOnTop.transform.position.y + cube.Size.y,
-            //         cube.transform.position.z);
-            
+
             Vector3 jumpPosition = new Vector3(cubeOnTop.transform.position.x + shift,
                 cubeOnTop.transform.position.y + cube.Size.y,
                 cube.transform.position.z);
