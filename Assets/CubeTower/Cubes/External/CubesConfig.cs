@@ -1,4 +1,6 @@
 using System;
+using CubeTower.Cubes.Runtime;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Cubes.Config
@@ -8,16 +10,6 @@ namespace Cubes.Config
     {
         public const string SpriteSheetName = "CubesSpriteSheet";
         public CubeDto[] Dtos;
-    }
-
-    [Serializable]
-    public class CubeDto
-    {
-        [SerializeField] private int _id;
-        [SerializeField] private string _spriteName;
-
-        public string SpriteName => _spriteName;
-        public int ID => _id;
     }
 }
 

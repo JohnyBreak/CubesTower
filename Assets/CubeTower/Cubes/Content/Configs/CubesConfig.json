@@ -1,0 +1,85 @@
+{
+  "sprite_sheet_name": "CubesSpriteSheet",
+  "cubes": [
+    {
+      "id": 0,
+      "sprite_name": "Cubes_0"
+    },
+    {
+      "id": 1,
+      "sprite_name": "Cubes_1"
+    },
+    {
+      "id": 2,
+      "sprite_name": "Cubes_2"
+    },
+    {
+      "id": 3,
+      "sprite_name": "Cubes_3"
+    },
+    {
+      "id": 4,
+      "sprite_name": "Cubes_4"
+    },
+    {
+      "id": 5,
+      "sprite_name": "Cubes_5"
+    },
+    {
+      "id": 6,
+      "sprite_name": "Cubes_6"
+    },
+    {
+      "id": 7,
+      "sprite_name": "Cubes_7"
+    },
+    {
+      "id": 8,
+      "sprite_name": "Cubes_8"
+    },
+    {
+      "id": 9,
+      "sprite_name": "Cubes_9"
+    },
+    {
+      "id": 10,
+      "sprite_name": "Cubes_10"
+    },
+    {
+      "id": 11,
+      "sprite_name": "Cubes_11"
+    },
+    {
+      "id": 12,
+      "sprite_name": "Cubes_12"
+    },
+    {
+      "id": 13,
+      "sprite_name": "Cubes_13"
+    },
+    {
+      "id": 14,
+      "sprite_name": "Cubes_14"
+    },
+    {
+      "id": 15,
+      "sprite_name": "Cubes_15"
+    },
+    {
+      "id": 16,
+      "sprite_name": "Cubes_16"
+    },
+    {
+      "id": 17,
+      "sprite_name": "Cubes_17"
+    },
+    {
+      "id": 18,
+      "sprite_name": "Cubes_18"
+    },
+    {
+      "id": 19,
+      "sprite_name": "Cubes_19"
+    }
+  ]
+}
