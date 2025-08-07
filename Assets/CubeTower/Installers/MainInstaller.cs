@@ -28,8 +28,9 @@ public class MainInstaller : MonoInstaller
         Container.Bind<ITowerPredicate>().To<TestTowerPredicate>().FromNew().AsSingle();
         Container.Bind<ConfigContainer>().FromNew().AsSingle();
         
-        
+        Container.Bind<IData>().To<TowerData>().FromNew().AsSingle().NonLazy();
         Container.Bind<IDataManager>().To<DataManager>().FromNew().AsSingle().NonLazy();
+        Container.Bind<IFileSerializer>().To<JsonFileSerializer>().FromNew().AsSingle();
         Container.Bind<ISerializer>().To<JsonNewtonsoftSerializer>().FromNew().AsSingle();
         Container.Bind<IConfigReader>().To<JsonNewtonsoftConfigReader>().FromNew().AsSingle();
         Container.Bind<CubePool>().FromNew().AsSingle();

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cubes;
+using CubeTower.Common.Data;
 using Localization;
 using Message;
 using UnityEngine;
@@ -12,7 +13,8 @@ namespace CubeTower
     {
         private const string TopLimitMessageKey = "Top screen limit";
         private const string SpawnedKey = "Cube spawned";
-        
+
+        private readonly TowerData _data = new TowerData();
         private readonly ScreenWorldUtility _screenWorldUtility;
         private readonly CubeAnimator _animator;
         private readonly MessageBox _messageBox;
@@ -26,13 +28,16 @@ namespace CubeTower
             CubeAnimator animator, 
             MessageBox messageBox,
             LayerMaskProvider layerMaskProvider,
-            List<ITowerPredicate> predicates)
+            List<ITowerPredicate> predicates,
+            IDataManager dataManager)
         {
             _screenWorldUtility = screenWorldUtility;
             _animator = animator;
             _messageBox = messageBox;
             _layerMaskProvider = layerMaskProvider;
             _placementPredicates = predicates;
+
+            _data = dataManager.GetData(_data.Name()) as TowerData;
         }
 
         public bool TrySet(Cube cube)
@@ -121,6 +126,7 @@ namespace CubeTower
         {
             cube.SetDragCallback(OnCubeDrag);
             _listNodes.Add(cube);
+            _data.Count = _listNodes.Count;
             _messageBox.Show(SpawnedKey.Localize());
         }
 
@@ -137,6 +143,7 @@ namespace CubeTower
         {
             DropTopCubes(cube);
             _listNodes.Remove(cube);
+            _data.Count = _listNodes.Count;
         }
 
         private void DropTopCubes(Cube cube)

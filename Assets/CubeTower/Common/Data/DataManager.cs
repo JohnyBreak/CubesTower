@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Serialization;
@@ -11,22 +12,38 @@ namespace CubeTower.Common.Data
 
         private readonly IDataLoader _dataLoader;
         private readonly Dictionary<string, IData> _dataNodes = new();
+        private readonly Dictionary<string, Type> _dataNameToType = new();
+        
         private readonly ISerializer _serializer;
+        private readonly IFileSerializer _fileserializer;
         private readonly List<IData> _datas;
         private DataFull _dataFull;
-        private string _savePath;
+        private string _folderPath;
+        private string _filePath;
         
-        public DataManager(ISerializer serializer, List<IData> datas)
+        public DataManager(
+            IFileSerializer fileSerializer, 
+            ISerializer serializer,
+            List<IData> datas)
         {
-            _savePath = $"{Application.persistentDataPath}/Data/";
+            _folderPath = Path.Combine(Application.persistentDataPath, "Data");
+            _filePath = $"{_folderPath}/{SaveFileName}";
+            _fileserializer = fileSerializer;
             _serializer = serializer;
             _datas = datas;
-            _dataLoader = new FileDataLoader(new JsonFileSerializer());
+            _dataLoader = new FileDataLoader(_fileserializer);
             
-            if (!Directory.Exists(_savePath))
+            if (!Directory.Exists(_folderPath))
             {
-                Directory.CreateDirectory(_savePath);
+                Directory.CreateDirectory(_folderPath);
             }
+            
+            foreach (var data in _datas)
+            {
+                _dataNameToType.Add(data.Name(), data.GetType());
+            }
+            
+            Load();
             
             foreach (var data in _datas)
             {
@@ -39,6 +56,7 @@ namespace CubeTower.Common.Data
                     _dataNodes[data.Name()] = data;
                 }
             }
+            
         }
 
         public IData GetData(string key)
@@ -56,14 +74,62 @@ namespace CubeTower.Common.Data
         {
             SaveInternal();
         }
+        
+        private void Load()
+        {
+            if (!File.Exists(_filePath))
+            {
+                Debug.Log($"DataManager >>> Data file {_filePath} does not exist");
+                return;
+            }
 
+            var result = _fileserializer.Load<ObjectRepositoriesContainer>(_filePath);
+
+            if (result == null)
+            {
+                Debug.LogError($"DataManager >>> file {_filePath} empty or something wrong when read");
+                return;
+            }
+            
+            SetSave(result);
+        }
+        
+        private void SetSave(ObjectRepositoriesContainer objectRepositoriesContainer)
+        {
+            if (objectRepositoriesContainer?.ObjectRepositories == null)
+            {
+                return;
+            }
+            
+            _dataNodes.Clear();
+            
+            foreach (var repository in objectRepositoriesContainer.ObjectRepositories)
+            {
+                if (repository.ObjectType == null || !_dataNameToType.ContainsKey(repository.ObjectType))
+                {
+                    continue; 
+                }
+            
+                var dataResult = _serializer.Read<IData>(repository.Object, _dataNameToType[repository.ObjectType]);
+                if (dataResult != null)
+                {
+                    _dataNodes.Add(repository.ObjectType, dataResult);
+                }
+                else
+                {
+                    Debug.LogError("DataManager >>> error with : " + repository.ObjectType);
+                    return;
+                }
+            }
+        }
+        
         private void SaveInternal()
         {
             if (_dataNodes != null && _dataNodes.Count > 0)
             {
                 var saveData = CreateSaveData();
                 
-                _dataLoader.Save(saveData, SaveFileName);
+                _dataLoader.Save(saveData, _filePath);
 
             }
             else
