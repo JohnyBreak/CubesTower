@@ -2,6 +2,7 @@ using System;
 using Cubes;
 using Cubes.UI;
 using CubeTower;
+using CubeTower.Common.Data;
 using Message;
 using Pool;
 using Serialization;
@@ -27,6 +28,9 @@ public class MainInstaller : MonoInstaller
         Container.Bind<ITowerPredicate>().To<TestTowerPredicate>().FromNew().AsSingle();
         Container.Bind<ConfigContainer>().FromNew().AsSingle();
         
+        
+        Container.Bind<IDataManager>().To<DataManager>().FromNew().AsSingle().NonLazy();
+        Container.Bind<ISerializer>().To<JsonNewtonsoftSerializer>().FromNew().AsSingle();
         Container.Bind<IConfigReader>().To<JsonNewtonsoftConfigReader>().FromNew().AsSingle();
         Container.Bind<CubePool>().FromNew().AsSingle();
         Container.Bind<LayerMaskProvider>().FromInstance(_layerMaskProvider).AsSingle();
