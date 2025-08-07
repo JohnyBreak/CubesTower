@@ -23,10 +23,10 @@ public class CubeAnimator
       var sequence = DOTween.Sequence();
       
       sequence.AppendCallback(() => target.ToggleCollider(false));
-      sequence.Append(target.transform.DOMove(_hole.FirstT.position, 0.5f).SetEase(Ease.OutSine));
+      sequence.Append(target.transform.DOMove((Vector2)_hole.FirstT.position, 0.5f).SetEase(Ease.OutSine));
       sequence.Append(target.transform.DORotate(new Vector3(0,0,45), 0.3f).SetEase(Ease.OutSine));
       sequence.AppendCallback(() => target.ToggleMaskable(true));
-      sequence.Append(target.transform.DOMove(_hole.SecondT.position, 0.5f).SetEase(Ease.OutSine));
+      sequence.Append(target.transform.DOMove((Vector2)_hole.SecondT.position, 0.5f).SetEase(Ease.OutSine));
       sequence.OnComplete(() =>
       {
          target.ToggleCollider(true);
