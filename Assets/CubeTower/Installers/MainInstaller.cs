@@ -1,3 +1,4 @@
+using System;
 using Cubes;
 using Cubes.Config;
 using CubeTower;
@@ -22,9 +23,10 @@ public class MainInstaller : MonoInstaller
     {
         Container.Bind<Tower>().FromNew().AsSingle();
         Container.Bind<AssetProvider>().FromNew().AsSingle();
+        Container.Bind<IDisposable>().To<AssetProvider>().FromResolve();
         Container.Bind<IconsProvider>().FromNew().AsSingle();
         Container.Bind<ITowerPredicate>().To<TestTowerPredicate>().FromNew().AsSingle();
-        
+       
         Container.Bind<CubePool>().FromNew().AsSingle();
         Container.Bind<LayerMaskProvider>().FromInstance(_layerMaskProvider).AsSingle();
         Container.Bind<Hole>().FromInstance(_hole).AsSingle();
@@ -35,6 +37,7 @@ public class MainInstaller : MonoInstaller
         Container.Bind<CubeAnimator>().FromNew().AsSingle().NonLazy();
         Container.Bind<CubeFactory>().FromMethod(CreateCubeFactory).AsSingle().NonLazy();
         Container.Bind<CubeSpawner>().FromMethod(CreateCubeSpawner).AsSingle().NonLazy();
+        Container.Bind<IDisposable>().To<CubeSpawner>().FromResolve();
         Container.Bind<CubeDropHandler>().FromMethod(CreateCubeDropHandler).AsSingle().NonLazy();
         Container.Bind<ScreenWorldUtility>().FromMethod(CreateScreenWorldUtility).AsSingle().NonLazy();
     }
