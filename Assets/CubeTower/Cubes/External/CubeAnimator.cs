@@ -30,6 +30,7 @@ public class CubeAnimator
       sequence.OnComplete(() =>
       {
          target.ToggleCollider(true);
+         target.transform.rotation = Quaternion.identity;
          target.ToggleMaskable(false);
          onCompleteCallback?.Invoke();
       });
@@ -43,6 +44,7 @@ public class CubeAnimator
       sequence.OnComplete(() =>
       {
          target.ToggleCollider(true);
+         target.ResetScale();
          onCompleteCallback?.Invoke();
       });
    }

@@ -1523,11 +1523,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: b8c55513d4af68a4b8b42863cd6429a8, type: 2}
-  _layerMaskProvider: {fileID: 1459179520}
   _scrollViewBorder: {fileID: 1823532561}
   _cam: {fileID: 519420031}
   _messageBox: {fileID: 1470733426}
   _scrollView: {fileID: 1097974535}
+  _layerMaskProvider: {fileID: 1459179520}
   _dragger: {fileID: 632072368}
   _hole: {fileID: 1188808022}
 --- !u!114 &1668602874

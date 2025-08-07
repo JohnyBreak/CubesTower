@@ -11,6 +11,7 @@ namespace Cubes
         
         private Action<Cube> _onDragStartCallback;
         private Vector2 _size;
+        private Vector3 _scale;
         private int _sortingOrder;
         
         public Vector2 Size => _size;
@@ -18,6 +19,7 @@ namespace Cubes
         private void Awake()
         {
             _sortingOrder = _spriteRenderer.sortingLayerID;
+            _scale = transform.localScale;
             
             _size = new Vector2(
                 _collider.size.x * transform.localScale.x, 
@@ -41,7 +43,12 @@ namespace Cubes
             _spriteRenderer.sortingOrder++;
             _onDragStartCallback?.Invoke(this);
         }
-        
+
+        public void ResetScale()
+        {
+            transform.localScale = _scale;
+        }
+
         public void OnDragEnd()
         {
             _spriteRenderer.sortingOrder = _sortingOrder;

@@ -4,7 +4,7 @@ namespace  Localization
     {
         public static string Translate(string key)
         {
-            return key;
+            return key;//TODO: translate
         }
     }
 }

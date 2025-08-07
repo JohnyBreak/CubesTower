@@ -2,7 +2,7 @@ using Cubes;
 using CubeTower;
 using Localization;
 using Message;
-using UnityEngine;
+using Pool;
 
 public class CubeDropHandler
 {
@@ -11,6 +11,7 @@ public class CubeDropHandler
     
     private readonly CubeAnimator _animator;
     private readonly MessageBox _messageBox;
+    private readonly CubePool _pool;
     private readonly ScreenWorldUtility _screenWorldUtility;
     private readonly Tower _tower;
 
@@ -18,12 +19,14 @@ public class CubeDropHandler
         Tower tower, 
         ScreenWorldUtility screenWorldUtility,
         CubeAnimator animator,
-        MessageBox messageBox)
+        MessageBox messageBox,
+        CubePool pool)
     {
         _tower = tower;
         _screenWorldUtility = screenWorldUtility;
         _animator = animator;
         _messageBox = messageBox;
+        _pool = pool;
     }
 
     public void Drop(Cube target)
@@ -38,21 +41,22 @@ public class CubeDropHandler
         if (target.transform.position.y < scrollPos.y)
         {
             _messageBox.Show(DestroyKey.Localize());
-            _animator.Destroy(target, () => Object.Destroy(target.gameObject));//TODO: return to pool
+            _animator.Destroy(target, () => _pool.BackObjectToPool(target));
             return;
         }
             
         if (target.transform.position.x < 0)
         {
             _messageBox.Show(HoleKey.Localize());
-            _animator.DropToHole(target, () => Object.Destroy(target.gameObject));
+            _animator.DropToHole(target, () => _pool.BackObjectToPool(target));
             return;
         }
 
         if (_tower.TrySet(target) == false)
         {
             _messageBox.Show(DestroyKey.Localize());
-            _animator.Destroy(target, () => Object.Destroy(target.gameObject));
+            _animator.Destroy(target, () => _pool.BackObjectToPool(target));
+            
         }
     }
 }

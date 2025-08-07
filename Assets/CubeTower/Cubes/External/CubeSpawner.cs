@@ -1,8 +1,8 @@
 using System;
 using Cubes;
 using Cubes.Config;
+using Pool;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 public class CubeSpawner : IDisposable
 {
@@ -46,21 +46,28 @@ public class CubeFactory
     private const string CubePrefabKey = "Cube";
     
     private readonly IconsProvider _iconsProvider;
-    private readonly Cube _prefab;
+    private readonly CubePool _pool;
     
     private readonly CubeDto[] _dtos;
 
-    public CubeFactory(IconsProvider iconsProvider, AssetProvider assetProvider, CubeDto[] dtos)
+    public CubeFactory(
+        IconsProvider iconsProvider, 
+        AssetProvider assetProvider,
+        CubePool pool,
+        CubeDto[] dtos)
     {
         _iconsProvider = iconsProvider;
-        _prefab = assetProvider.LoadAssetSync<GameObject>(CubePrefabKey).GetComponent<Cube>();
+        _pool = pool;
+        var prefab = assetProvider.LoadAssetSync<GameObject>(CubePrefabKey).GetComponent<Cube>();
+        _pool.SetPrefab(prefab);
         _dtos = dtos;
     }
 
     public Cube GetCube(int id)
     {
         var dto = _dtos[id];
-        var cube = Object.Instantiate(_prefab);
+        var cube = _pool.GetPooledObject(true);
+        
         var sprite = _iconsProvider.GetSprite(CubesConfig.SpriteSheetName, dto.SpriteName);
         cube.SetSprite(sprite);
         return cube;

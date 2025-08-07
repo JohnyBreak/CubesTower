@@ -2,19 +2,18 @@ using Cubes;
 using Cubes.Config;
 using CubeTower;
 using Message;
+using Pool;
 using UnityEngine;
 using Zenject;
 
 public class MainInstaller : MonoInstaller
 {
     [SerializeField] private CubesConfig _config;
-    [SerializeField] private LayerMaskProvider _layerMaskProvider;
     [SerializeField] private RectTransform _scrollViewBorder;
     [SerializeField] private Camera _cam;
-    private CubeAnimator _animator;
     [SerializeField] private MessageBox _messageBox;
     [SerializeField] private ScrollView _scrollView;
-    
+    [SerializeField] private LayerMaskProvider _layerMaskProvider;
     [SerializeField] private Dragger _dragger;
     //[SerializeField] private cube pool
     [SerializeField] private Hole _hole;
@@ -25,6 +24,7 @@ public class MainInstaller : MonoInstaller
         Container.Bind<AssetProvider>().FromNew().AsSingle();
         Container.Bind<IconsProvider>().FromNew().AsSingle();
         
+        Container.Bind<CubePool>().FromNew().AsSingle();
         Container.Bind<LayerMaskProvider>().FromInstance(_layerMaskProvider).AsSingle();
         Container.Bind<Hole>().FromInstance(_hole).AsSingle();
         Container.Bind<Dragger>().FromInstance(_dragger).AsSingle();
@@ -44,14 +44,16 @@ public class MainInstaller : MonoInstaller
         var tower = context.Container.Resolve<Tower>();
         var animator = context.Container.Resolve<CubeAnimator>();
         var messageBox = context.Container.Resolve<MessageBox>();
-        return new CubeDropHandler(tower, utility, animator, messageBox);
+        var pool = context.Container.Resolve<CubePool>();
+        return new CubeDropHandler(tower, utility, animator, messageBox, pool);
     }
 
     private CubeFactory CreateCubeFactory(InjectContext context)
     {
         var iconsProvider = context.Container.Resolve<IconsProvider>();
         var assetProvider = context.Container.Resolve<AssetProvider>();
-        return new CubeFactory(iconsProvider, assetProvider, _config.Dtos);
+        var pool = context.Container.Resolve<CubePool>();
+        return new CubeFactory(iconsProvider, assetProvider, pool, _config.Dtos);
     }
 
     private CubeSpawner CreateCubeSpawner(InjectContext context)
