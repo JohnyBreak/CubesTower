@@ -5,9 +5,11 @@ using Zenject;
 public class ExitHandler : MonoBehaviour
 {
     [Inject] private IDataManager _dataManager;
+    [Inject] private TowerLoader _towerLoader;
     
     private void OnApplicationQuit()
     {
-        _dataManager.Save();
+        _towerLoader?.Save();
+        _dataManager?.Save();
     }
 }

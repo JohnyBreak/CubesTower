@@ -3,19 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class Disposer : MonoBehaviour
+namespace CubeTower
 {
-    [Inject] private List<IDisposable> _disposables;
-    private void OnDestroy()
+    public class Disposer : MonoBehaviour
     {
-        foreach (var disposable in _disposables)
+        [Inject] private List<IDisposable> _disposables;
+
+        private void OnDestroy()
         {
-            if (disposable is SceneContextRegistryAdderAndRemover)
+            if (_disposables == null)
             {
-                continue;
+                return;
             }
 
-            disposable.Dispose();
+            foreach (var disposable in _disposables)
+            {
+                if (disposable is SceneContextRegistryAdderAndRemover)
+                {
+                    continue;
+                }
+
+                disposable.Dispose();
+            }
         }
     }
 }

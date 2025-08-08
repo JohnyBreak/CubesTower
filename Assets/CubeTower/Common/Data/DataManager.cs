@@ -49,10 +49,12 @@ namespace CubeTower.Common.Data
             {
                 if (!_dataNodes.ContainsKey(data.Name()))
                 {
+                    data.WhenCreateNewData();
                     _dataNodes.Add(data.Name(), data);
                 }
                 else if (_dataNodes[data.Name()] == null)
                 {
+					data.WhenCreateNewData();
                     _dataNodes[data.Name()] = data;
                 }
             }
@@ -144,6 +146,7 @@ namespace CubeTower.Common.Data
             
             foreach (var dataNode in _dataNodes)
             {
+				dataNode.Value.BeforeSerialize();
                 var save = _serializer.Write(dataNode.Value);
                 
                 _dataFull.AddData(new ObjectRepository(dataNode.Key, save));

@@ -13,7 +13,8 @@ namespace Cubes
         private Vector2 _size;
         private Vector3 _scale;
         private int _sortingOrder;
-        
+
+        public int ID { get; private set; }
         public Vector2 Size => _size;
         
         private void Awake()
@@ -57,6 +58,11 @@ namespace Cubes
         public void SetSprite(Sprite sprite)
         {
             _spriteRenderer.sprite = sprite;
+        }
+
+        public void SetId(int id)
+        {
+            ID = id;
         }
 
         public void ToggleMaskable(bool showInMask)

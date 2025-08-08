@@ -1,27 +1,36 @@
 using System;
+using System.Collections.Generic;
+using Cubes;
 using CubeTower.Common.Data;
 using Newtonsoft.Json;
 using UnityEngine;
 
-[Serializable]
-[JsonObject(MemberSerialization.Fields)]
-public class TowerData : IData
+namespace CubeTower
 {
-    [SerializeField] private int _count;
-
-    public TowerData()
+    [Serializable]
+    [JsonObject(MemberSerialization.Fields)]
+    public class TowerData : IData
     {
-        
-    }
+        [SerializeField] private List<TowerEntry> _entries;
 
-    public int Count
-    {
-        get => _count;
-        set => _count = value;
-    }
+        public List<TowerEntry> Entries
+        {
+            get => _entries;
+            set => _entries = value;
+        }
 
-    public string Name()
-    {
-        return nameof(TowerData); 
+        public string Name()
+        {
+            return nameof(TowerData);
+        }
+
+        public void WhenCreateNewData()
+        {
+            _entries = new();
+        }
+    
+        public void BeforeSerialize()
+        {
+        }
     }
 }

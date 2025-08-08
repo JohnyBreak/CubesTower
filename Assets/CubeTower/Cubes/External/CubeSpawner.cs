@@ -71,6 +71,7 @@ public class CubeFactory
         
         var sprite = _iconsProvider.GetSprite(_dtos.CubesDtos.SpriteSheetName, dto.SpriteName);
         cube.SetSprite(sprite);
+        cube.SetId(id);
         return cube;
     }
 }

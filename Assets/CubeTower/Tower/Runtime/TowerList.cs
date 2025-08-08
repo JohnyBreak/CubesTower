@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CubeTower
 {
-    public class TowerList<T>
+    public class TowerList<T> : IEnumerable<T>
     {
         public TowerNode<T> Head;
         public TowerNode<T> Tail;
@@ -116,6 +116,20 @@ namespace CubeTower
         {
             return new TowerNode<T>(data);
         }
-    }
 
+        public IEnumerator GetEnumerator()
+        {
+            var current = Head;
+            while (current != null)
+            {
+                yield return current.Data;
+                current = current.Next;
+            }
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return (IEnumerator<T>) GetEnumerator();
+        }
+    }
 }

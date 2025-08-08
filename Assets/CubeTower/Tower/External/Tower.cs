@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cubes;
@@ -14,7 +15,7 @@ namespace CubeTower
         private const string TopLimitMessageKey = "Top screen limit";
         private const string SpawnedKey = "Cube spawned";
 
-        private readonly TowerData _data = new TowerData();
+        private readonly TowerData _data;
         private readonly ScreenWorldUtility _screenWorldUtility;
         private readonly CubeAnimator _animator;
         private readonly MessageBox _messageBox;
@@ -22,6 +23,8 @@ namespace CubeTower
 
         private TowerList<Cube> _listNodes = new();
         private List<ITowerPredicate> _placementPredicates = new();
+
+        public TowerList<Cube> Nodes => _listNodes;
         
         public Tower(
             ScreenWorldUtility screenWorldUtility, 
@@ -37,7 +40,11 @@ namespace CubeTower
             _layerMaskProvider = layerMaskProvider;
             _placementPredicates = predicates;
 
-            _data = dataManager.GetData(_data.Name()) as TowerData;
+            _data = dataManager.GetData(nameof(TowerData)) as TowerData;
+            if (_data == null)
+            {
+                Debug.LogError("TowerData == null");
+            }
         }
 
         public bool TrySet(Cube cube)
@@ -104,6 +111,12 @@ namespace CubeTower
             return true;
         }
 
+        public void AddSilent(Cube cube)
+        {
+            cube.SetDragCallback(OnCubeDrag);
+            _listNodes.Add(cube);
+        }
+
         private bool CanBePlaced(Cube cube)
         {
             foreach (var predicate in _placementPredicates)
@@ -124,9 +137,7 @@ namespace CubeTower
 
         private void AddToList(Cube cube)
         {
-            cube.SetDragCallback(OnCubeDrag);
-            _listNodes.Add(cube);
-            _data.Count = _listNodes.Count;
+            AddSilent(cube);
             _messageBox.Show(SpawnedKey.Localize());
         }
 
@@ -143,7 +154,6 @@ namespace CubeTower
         {
             DropTopCubes(cube);
             _listNodes.Remove(cube);
-            _data.Count = _listNodes.Count;
         }
 
         private void DropTopCubes(Cube cube)
