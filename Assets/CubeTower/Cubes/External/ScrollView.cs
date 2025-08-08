@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Cubes.UI
 {
-    public class ScrollView : MonoBehaviour
+    public class ScrollView : MonoBehaviour, IInitableEntity
     {
         public event Action<int> OnCubeSelectEvent;
     
@@ -15,7 +15,11 @@ namespace Cubes.UI
     
         [SerializeField] private Transform _parent;
         [SerializeField] private ScrollRect _scrollRect;
-    
+
+        private AssetProvider _assetProvider;
+        private IconsProvider _iconsProvider;
+        private ConfigContainer _container;
+        
         private CubeScrollView _prefab;
         private Action<int> _selectCallback;
     
@@ -25,19 +29,31 @@ namespace Cubes.UI
             IconsProvider iconsProvider,
             ConfigContainer container)
         {
-            _prefab = assetProvider.LoadAssetSync<GameObject>(CubeScrollViewPrefabKey).GetComponent<CubeScrollView>();
+            _assetProvider = assetProvider;
+            _iconsProvider = iconsProvider;
+            _container = container;
+        }
 
-            if (container.CubesDtos == null)
+        public int GetOrder()
+        {
+            return 0;
+        }
+
+        public void Init()
+        {
+            _prefab = _assetProvider.LoadAssetSync<GameObject>(CubeScrollViewPrefabKey).GetComponent<CubeScrollView>();
+
+            if (_container.CubesDtos == null)
             {
                 return;
             }
 
-            foreach (var dto in container.CubesDtos.Dtos)
+            foreach (var dto in _container.CubesDtos.Dtos)
             {
                 var cube = Instantiate(_prefab, _parent);
                 cube.Init(
                     dto.ID,
-                    iconsProvider.GetSprite(CubesConfig.SpriteSheetName, dto.SpriteName),
+                    _iconsProvider.GetSprite(CubesConfig.SpriteSheetName, dto.SpriteName),
                     OnSelect,
                     DragScroll);
             }

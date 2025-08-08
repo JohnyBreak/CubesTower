@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cubes;
@@ -10,20 +9,21 @@ using Random = UnityEngine.Random;
 
 namespace CubeTower
 {
-    public class Tower
+    public class Tower : IInitableEntity
     {
         private const string TopLimitMessageKey = "Top screen limit";
         private const string SpawnedKey = "Cube spawned";
-
-        private readonly TowerData _data;
+        
+        private readonly IDataManager _dataManager;
         private readonly ScreenWorldUtility _screenWorldUtility;
         private readonly CubeAnimator _animator;
         private readonly MessageBox _messageBox;
         private readonly LayerMaskProvider _layerMaskProvider;
 
+        private TowerData _data;
         private TowerList<Cube> _listNodes = new();
         private List<ITowerPredicate> _placementPredicates = new();
-
+        
         public TowerList<Cube> Nodes => _listNodes;
         
         public Tower(
@@ -39,14 +39,23 @@ namespace CubeTower
             _messageBox = messageBox;
             _layerMaskProvider = layerMaskProvider;
             _placementPredicates = predicates;
+            _dataManager = dataManager;
+        }
 
-            _data = dataManager.GetData(nameof(TowerData)) as TowerData;
+        public int GetOrder()
+        {
+            return 0;
+        }
+
+        public void Init()
+        {
+            _data = _dataManager.GetData(nameof(TowerData)) as TowerData;
             if (_data == null)
             {
                 Debug.LogError("TowerData == null");
             }
         }
-
+        
         public bool TrySet(Cube cube)
         {
             var rightUpCornerPos = _screenWorldUtility.GetRightUpCornerPosition();

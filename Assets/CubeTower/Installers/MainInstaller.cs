@@ -22,34 +22,44 @@ namespace CubeTower.Installers
         
         public override void InstallBindings()
         {
-            
             Container.Bind<Tower>().FromNew().AsSingle();
             Container.Bind<AssetProvider>().FromNew().AsSingle();
-            Container.Bind<IDisposable>().To<AssetProvider>().FromResolve();
             Container.Bind<IconsProvider>().FromNew().AsSingle();
             Container.Bind<ITowerPredicate>().To<TestTowerPredicate>().FromNew().AsSingle();
             Container.Bind<ConfigContainer>().FromNew().AsSingle();
-
+            
             Container.Bind<IData>().To<TowerData>().FromNew().AsSingle().NonLazy();
-            Container.Bind<IDataManager>().To<DataManager>().FromNew().AsSingle().NonLazy();
+            Container.Bind<DataManager>().FromNew().AsSingle().NonLazy();
+            Container.Bind<IDataManager>().To<DataManager>().FromResolve();
             Container.Bind<IFileSerializer>().To<JsonFileSerializer>().FromNew().AsSingle();
             Container.Bind<ISerializer>().To<JsonNewtonsoftSerializer>().FromNew().AsSingle();
             Container.Bind<IConfigReader>().To<JsonNewtonsoftConfigReader>().FromNew().AsSingle();
             Container.Bind<CubePool>().FromNew().AsSingle();
-            Container.Bind<TowerLoader>().FromNew().AsSingle().When(context => context.Container.HasBinding<IDataManager>());
+            Container.Bind<TowerLoader>().FromNew().AsSingle();
             
-            Container.Bind<LayerMaskProvider>().FromInstance(_layerMaskProvider).AsSingle();
             Container.Bind<Hole>().FromInstance(_hole).AsSingle();
             Container.Bind<Dragger>().FromInstance(_dragger).AsSingle();
             Container.Bind<ScrollView>().FromInstance(_scrollView).AsSingle();
             Container.Bind<MessageBox>().FromInstance(_messageBox).AsSingle();
-
+            Container.Bind<LayerMaskProvider>().FromInstance(_layerMaskProvider).AsSingle();
+            
             Container.Bind<CubeAnimator>().FromNew().AsSingle().NonLazy();
             Container.Bind<CubeFactory>().FromMethod(CreateCubeFactory).AsSingle().NonLazy();
             Container.Bind<CubeSpawner>().FromMethod(CreateCubeSpawner).AsSingle().NonLazy();
-            Container.Bind<IDisposable>().To<CubeSpawner>().FromResolve();
             Container.Bind<CubeDropHandler>().FromMethod(CreateCubeDropHandler).AsSingle().NonLazy();
             Container.Bind<ScreenWorldUtility>().FromMethod(CreateScreenWorldUtility).AsSingle().NonLazy();
+            
+            Container.Bind<IInitableEntity>().To<Tower>().FromResolve();
+            Container.Bind<IInitableEntity>().To<ScrollView>().FromResolve();
+            Container.Bind<IInitableEntity>().To<MessageBox>().FromResolve();
+            Container.Bind<IInitableEntity>().To<TowerLoader>().FromResolve();
+            Container.Bind<IInitableEntity>().To<DataManager>().FromResolve();
+            Container.Bind<IInitableEntity>().To<ConfigContainer>().FromResolve();
+            Container.Bind<IInitableEntity>().To<ScreenWorldUtility>().FromResolve();
+            
+            Container.Bind<IDisposable>().To<CubePool>().FromResolve();
+            Container.Bind<IDisposable>().To<CubeSpawner>().FromResolve();
+            Container.Bind<IDisposable>().To<AssetProvider>().FromResolve();
         }
 
         private CubeDropHandler CreateCubeDropHandler(InjectContext context)

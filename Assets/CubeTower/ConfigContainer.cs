@@ -1,7 +1,7 @@
 using Serialization;
 using UnityEngine;
 
-public class ConfigContainer
+public class ConfigContainer : IInitableEntity
 {
     private const string _configKey = "CubesConfig";
     
@@ -17,10 +17,18 @@ public class ConfigContainer
     {
         _assetProvider = assetProvider;
         _configReader = configReader;
-
-        ReadConfig();
     }
 
+    public int GetOrder()
+    {
+        return -5;
+    }
+
+    public void Init()
+    {
+        ReadConfig();
+    }
+    
     private void ReadConfig()
     {
         var text = _assetProvider.LoadAssetSync<TextAsset>(_configKey);

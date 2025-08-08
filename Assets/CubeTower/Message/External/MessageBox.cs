@@ -1,4 +1,3 @@
-using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine;
 namespace Message
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public class MessageBox : MonoBehaviour
+    public class MessageBox : MonoBehaviour, IInitableEntity
     {
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private TMP_Text _text;
@@ -15,15 +14,15 @@ namespace Message
         private Sequence _sequence;
         private int _priority = 0;
         private int _verticalOffset = 100;
-        
-        private void Awake()
+
+        public int GetOrder()
         {
-            _canvasGroup.alpha = 0;
+            return 0;
         }
 
-        private IEnumerator Start()
+        public void Init()
         {
-            yield return null;
+            _canvasGroup.alpha = 0;
             _startPosition = transform.position;
         }
 
@@ -55,11 +54,6 @@ namespace Message
             _sequence.AppendInterval(1f);
             _sequence.Append(_canvasGroup.DOFade(0, 0.3f));
             _sequence.OnComplete(() => _priority = 0);
-        }
-        
-        public void HideImmediately()
-        {
-            _canvasGroup.alpha = 0;
         }
     }
 }

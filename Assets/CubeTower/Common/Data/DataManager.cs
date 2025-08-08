@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CubeTower.Common.Data
 {
-    public class DataManager : IDataManager
+    public class DataManager : IDataManager, IInitableEntity
     {
         private const string SaveFileName ="Save.json";
 
@@ -32,7 +32,15 @@ namespace CubeTower.Common.Data
             _serializer = serializer;
             _datas = datas;
             _dataLoader = new FileDataLoader(_fileserializer);
-            
+        }
+        
+        public int GetOrder()
+        {
+            return -10;
+        }
+
+        public void Init()
+        {
             if (!Directory.Exists(_folderPath))
             {
                 Directory.CreateDirectory(_folderPath);
@@ -54,11 +62,10 @@ namespace CubeTower.Common.Data
                 }
                 else if (_dataNodes[data.Name()] == null)
                 {
-					data.WhenCreateNewData();
+                    data.WhenCreateNewData();
                     _dataNodes[data.Name()] = data;
                 }
             }
-            
         }
 
         public IData GetData(string key)

@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace Pool
 {
-    public class CubePool
+    public class CubePool : IDisposable
     {
         private Cube _objectPrefab;
         private List<Cube> _pooledObjects = new();
