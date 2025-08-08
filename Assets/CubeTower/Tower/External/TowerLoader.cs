@@ -49,6 +49,12 @@ public class TowerLoader : IInitableEntity
     public void Save()
     {
         _data.Entries.Clear();
+
+        if (_tower.Nodes.Count < 1)
+        {
+            return;
+        }
+
         foreach (var cube in _tower.Nodes)
         {
             _data.Entries.Add(new TowerEntry((Cube)cube));
